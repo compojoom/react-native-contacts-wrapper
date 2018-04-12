@@ -66,10 +66,13 @@ RCT_EXPORT_METHOD(getEmail:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseR
     picker = [[ABPeoplePickerNavigationController alloc] init];
     [((ABPeoplePickerNavigationController *)picker) setPeoplePickerDelegate:self];
   }
-  //Launch Contact Picker or Address Book View Controller
-  UIViewController *root = [[[UIApplication sharedApplication] delegate] window].rootViewController;
-  [root presentViewController:picker animated:YES completion:nil];
-
+  
+  // Dispatch the UI on the main thread
+  dispatch_async(dispatch_get_main_queue(), ^{
+    //Launch Contact Picker or Address Book View Controller
+    UIViewController *root = [[[UIApplication sharedApplication] delegate] window].rootViewController;
+    [root presentViewController:picker animated:YES completion:nil];
+  });
 
 }
 
